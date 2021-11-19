@@ -1,0 +1,18 @@
+import { config } from "https://deno.land/x/dotenv@v3.1.0/mod.ts";
+
+const { LINE_TOKEN, LINE_URL } = config();
+
+export async function sendLineNotify(message: string): Promise<void> {
+  const body = new URLSearchParams({ message });
+
+  const res = await fetch(LINE_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${LINE_TOKEN}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body,
+  });
+
+  console.log(await res.json());
+}
