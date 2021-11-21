@@ -3,12 +3,9 @@ import { ethers } from "https://esm.sh/ethers?dts";
 
 import { sendLineNotify } from "./utils/line-helper.ts";
 
-const { INFURA_PROJECT_ID, CONTRACT_ADDRESS } = config();
+const { INFURA_URL, CONTRACT_ADDRESS } = config();
 
-// const infura = `wss://ropsten.infura.io/ws/v3/${INFURA_PROJECT_ID}`;
-const infura = `wss://mainnet.infura.io/ws/v3/${INFURA_PROJECT_ID}`;
-const provider = new ethers.providers.WebSocketProvider(infura);
-
+const provider = new ethers.providers.WebSocketProvider(INFURA_URL);
 const blockNumber = await provider.getBlockNumber();
 console.log("blockNumber:", blockNumber);
 
