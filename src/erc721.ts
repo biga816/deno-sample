@@ -26,7 +26,7 @@ const sendNotify = async (
 
   const punkIndexStr = punkIndex.toString().padStart(4, "0");
   console.log(
-    `https://www.larvalabs.com/public/images/cryptopunks/${punkIndexStr}.png`
+    `https://www.larvalabs.com/public/images/cryptopunks/punk${punkIndexStr}.png`
   );
 
   await sendLineNotify(msg);
