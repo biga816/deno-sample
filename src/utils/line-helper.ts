@@ -2,8 +2,14 @@ import { config } from "https://deno.land/x/dotenv@v3.1.0/mod.ts";
 
 const { LINE_TOKEN, LINE_URL } = config();
 
-export async function sendLineNotify(message: string): Promise<void> {
-  const body = new URLSearchParams({ message });
+export async function sendLineNotify(params: {
+  message: string;
+  imageThumbnail?: string;
+  imageFullsize?: string;
+}): Promise<void> {
+  const body = new URLSearchParams({
+    ...params,
+  });
 
   const res = await fetch(LINE_URL, {
     method: "POST",

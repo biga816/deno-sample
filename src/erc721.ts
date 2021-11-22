@@ -17,19 +17,18 @@ const abi = [
 ];
 
 const sendNotify = async (
-  msg: string,
+  text: string,
   transactionHash: string,
   punkIndex: number
 ): Promise<void> => {
-  console.log(msg);
-  console.log(`https://etherscan.io/tx/${transactionHash}`);
-
   const punkIndexStr = punkIndex.toString().padStart(4, "0");
-  console.log(
-    `https://www.larvalabs.com/public/images/cryptopunks/punk${punkIndexStr}.png`
-  );
+  const url = `https://www.larvalabs.com/public/images/cryptopunks/punk${punkIndexStr}.png`;
+  const message = `${text} \nPlease refer to https://etherscan.io/tx/${transactionHash}`;
 
-  await sendLineNotify(msg);
+  console.log(message);
+  console.log(url);
+
+  await sendLineNotify({ message, imageFullsize: url, imageThumbnail: url });
 };
 
 const erc721 = new ethers.Contract(CONTRACT_ADDRESS, abi, provider);
@@ -40,11 +39,13 @@ erc721.on("PunkTransfer", (owner, to, punkIndex, { transactionHash }) => {
 });
 
 erc721.on("PunkBought", (punkIndex, value, owner, to, { transactionHash }) => {
-  const msg = `PunkBought: ${punkIndex} was bought from ${owner} to ${to} for ${value} wei.`;
+  const etherStr = ethers.utils.formatEther(value);
+  const msg = `PunkBought: ${punkIndex} was bought from ${owner} to ${to} for ${etherStr} ether.`;
   sendNotify(msg, transactionHash, punkIndex);
 });
 
 erc721.on("PunkOffered", (punkIndex, minValue, to, { transactionHash }) => {
-  const msg = `PunkOffered: ${punkIndex} was offerd from ${to} for ${minValue} wei.`;
+  const etherStr = ethers.utils.formatEther(minValue);
+  const msg = `PunkOffered: ${punkIndex} was offerd from ${to} for ${etherStr} wei.`;
   sendNotify(msg, transactionHash, punkIndex);
 });
